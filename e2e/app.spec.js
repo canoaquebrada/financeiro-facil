@@ -36,14 +36,7 @@ test.describe('Financeiro Fácil - Testes Completos', () => {
     await expect(page.locator('text=Lançamentos vencidos')).toBeVisible();
   });
 
-  test('03 - Transações - CRUD completo (renumerado)', async ({ page }) => {
-    await page.goto('/login');
-    await page.fill('input[placeholder="voce@empresa.com"]', TEST_USER.email);
-    await page.fill('input[placeholder="Sua senha"]', TEST_USER.password);
-    await page.click('button:has-text("Entrar")');
-    await page.waitForURL('**/dashboard');
-
-  test('05 - Transações - CRUD completo', async ({ page }) => {
+  test('03 - Transações - CRUD completo', async ({ page }) => {
     await page.goto('/login');
     await page.fill('input[placeholder="voce@empresa.com"]', TEST_USER.email);
     await page.fill('input[placeholder="Sua senha"]', TEST_USER.password);
@@ -77,7 +70,7 @@ test.describe('Financeiro Fácil - Testes Completos', () => {
     await page.click('button:has-text("Excluir") >> nth=0');
   });
 
-  test('06 - Relatórios carrega e exibe dados', async ({ page }) => {
+  test('04 - Relatórios carrega e exibe dados', async ({ page }) => {
     await page.goto('/login');
     await page.fill('input[placeholder="voce@empresa.com"]', TEST_USER.email);
     await page.fill('input[placeholder="Sua senha"]', TEST_USER.password);
@@ -91,7 +84,7 @@ test.describe('Financeiro Fácil - Testes Completos', () => {
     await expect(page.locator('text=Lucro')).toBeVisible();
   });
 
-  test('07 - Assinatura - exibe planos e informações', async ({ page }) => {
+  test('05 - Assinatura - exibe planos e informações', async ({ page }) => {
     await page.goto('/login');
     await page.fill('input[placeholder="voce@empresa.com"]', TEST_USER.email);
     await page.fill('input[placeholder="Sua senha"]', TEST_USER.password);
@@ -106,7 +99,7 @@ test.describe('Financeiro Fácil - Testes Completos', () => {
     await expect(page.locator('text=Expira em')).toBeVisible();
   });
 
-  test('08 - Configurações - alterar nome e tema', async ({ page }) => {
+  test('06 - Configurações - alterar nome e tema', async ({ page }) => {
     await page.goto('/login');
     await page.fill('input[placeholder="voce@empresa.com"]', TEST_USER.email);
     await page.fill('input[placeholder="Sua senha"]', TEST_USER.password);
@@ -131,7 +124,7 @@ test.describe('Financeiro Fácil - Testes Completos', () => {
     expect(isLight).toBe(true);
   });
 
-  test('09 - Admin - acesso ao painel administrativo', async ({ page }) => {
+  test('07 - Admin - acesso ao painel administrativo', async ({ page }) => {
     await page.goto('/login');
     await page.fill('input[placeholder="voce@empresa.com"]', TEST_USER.email);
     await page.fill('input[placeholder="Sua senha"]', TEST_USER.password);
@@ -145,7 +138,7 @@ test.describe('Financeiro Fácil - Testes Completos', () => {
     await expect(page.locator('text=Administradores')).toBeVisible();
   });
 
-  test('10 - Logout funciona corretamente', async ({ page }) => {
+  test('08 - Logout funciona corretamente', async ({ page }) => {
     await page.goto('/login');
     await page.fill('input[placeholder="voce@empresa.com"]', TEST_USER.email);
     await page.fill('input[placeholder="Sua senha"]', TEST_USER.password);
@@ -157,7 +150,7 @@ test.describe('Financeiro Fácil - Testes Completos', () => {
     await expect(page.locator('h2')).toContainText('Entrar');
   });
 
-  test('11 - Login com dados corretos', async ({ page }) => {
+  test('09 - Login com dados corretos', async ({ page }) => {
     await page.goto('/login');
     await expect(page.locator('h2')).toContainText('Entrar');
 
@@ -170,7 +163,7 @@ test.describe('Financeiro Fácil - Testes Completos', () => {
     await expect(page.locator(`text=Olá, ${TEST_USER.name}`)).toBeVisible();
   });
 
-  test('12 - Login com dados inválidos mostra erro', async ({ page }) => {
+  test('10 - Login com dados inválidos mostra erro', async ({ page }) => {
     await page.goto('/login');
 
     await page.fill('input[placeholder="voce@empresa.com"]', 'invalido@email.com');
@@ -180,7 +173,7 @@ test.describe('Financeiro Fácil - Testes Completos', () => {
     await expect(page.locator('text=E-mail ou senha inválidos')).toBeVisible();
   });
 
-  test('13 - Navegação entre páginas funciona', async ({ page }) => {
+  test('11 - Navegação entre páginas funciona', async ({ page }) => {
     await page.goto('/login');
     await page.fill('input[placeholder="voce@empresa.com"]', TEST_USER.email);
     await page.fill('input[placeholder="Sua senha"]', TEST_USER.password);
@@ -203,7 +196,7 @@ test.describe('Financeiro Fácil - Testes Completos', () => {
     }
   });
 
-  test('14 - Registro com email duplicado mostra erro', async ({ page }) => {
+  test('12 - Registro com email duplicado mostra erro', async ({ page }) => {
     await page.goto('/register');
 
     await page.fill('input[placeholder="Seu nome"]', 'Duplicado');
@@ -214,7 +207,7 @@ test.describe('Financeiro Fácil - Testes Completos', () => {
     await expect(page.locator('text=Este e-mail já está cadastrado')).toBeVisible();
   });
 
-  test('15 - Filtros de transações funcionam', async ({ page }) => {
+  test('13 - Filtros de transações funcionam', async ({ page }) => {
     await page.goto('/login');
     await page.fill('input[placeholder="voce@empresa.com"]', TEST_USER.email);
     await page.fill('input[placeholder="Sua senha"]', TEST_USER.password);
@@ -230,6 +223,4 @@ test.describe('Financeiro Fácil - Testes Completos', () => {
     await page.click('button:has-text("Limpar filtros")');
     await page.waitForTimeout(500);
   });
-
-
 });
