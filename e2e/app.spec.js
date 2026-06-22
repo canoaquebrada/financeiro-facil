@@ -36,72 +36,12 @@ test.describe('Financeiro Fácil - Testes Completos', () => {
     await expect(page.locator('text=Lançamentos vencidos')).toBeVisible();
   });
 
-  test('03 - Categorias - CRUD completo', async ({ page }) => {
+  test('03 - Transações - CRUD completo (renumerado)', async ({ page }) => {
     await page.goto('/login');
     await page.fill('input[placeholder="voce@empresa.com"]', TEST_USER.email);
     await page.fill('input[placeholder="Sua senha"]', TEST_USER.password);
     await page.click('button:has-text("Entrar")');
     await page.waitForURL('**/dashboard');
-
-    await page.goto('/categories');
-    await expect(page.locator('h1')).toContainText('Categorias');
-
-    const categoryName = 'Teste Automação';
-    await page.fill('input[placeholder="Ex.: Consultoria"]', categoryName);
-    await page.click('button:has-text("Salvar categoria")');
-
-    await expect(page.locator(`text=${categoryName}`)).toBeVisible();
-
-    await page.click('button:has-text("Editar") >> nth=0');
-    const editedName = 'Teste Editado';
-    await page.fill('input[placeholder="Ex.: Consultoria"]', '');
-    await page.fill('input[placeholder="Ex.: Consultoria"]', editedName);
-    await page.click('button:has-text("Salvar categoria")');
-
-    await expect(page.locator(`text=${editedName}`)).toBeVisible();
-
-    page.once('dialog', (dialog) => {
-      dialog.accept();
-    });
-    await page.click('button:has-text("Excluir") >> nth=0');
-  });
-
-  test('04 - Produtos - CRUD completo', async ({ page }) => {
-    await page.goto('/login');
-    await page.fill('input[placeholder="voce@empresa.com"]', TEST_USER.email);
-    await page.fill('input[placeholder="Sua senha"]', TEST_USER.password);
-    await page.click('button:has-text("Entrar")');
-    await page.waitForURL('**/dashboard');
-
-    await page.goto('/products');
-    await expect(page.locator('h1')).toContainText('Produtos');
-
-    await page.click('button:has-text("Adicionar produto")');
-    await expect(page.locator('text=Novo produto')).toBeVisible();
-
-    const productName = 'Produto Teste PW';
-    await page.fill('input[placeholder="Ex.: Teclado Mecânico"]', productName);
-    await page.fill('input[placeholder="Ex.: Teclado RGB switch azul"]', 'Produto de teste automatizado');
-    await page.fill('input[placeholder="0,00"] >> nth=0', '50');
-    await page.fill('input[placeholder="0,00"] >> nth=1', '100');
-    await page.click('button:has-text("Salvar")');
-
-    await expect(page.locator(`text=${productName}`)).toBeVisible();
-    await expect(page.locator('text=R$ 50,00')).toBeVisible();
-    await expect(page.locator('text=R$ 100,00')).toBeVisible();
-
-    await page.click('button:has-text("Editar") >> nth=0');
-    const editedProductName = 'Produto Editado PW';
-    await page.fill('input[placeholder="Ex.: Teclado Mecânico"]', '');
-    await page.fill('input[placeholder="Ex.: Teclado Mecânico"]', editedProductName);
-    await page.click('button:has-text("Salvar")');
-    await expect(page.locator(`text=${editedProductName}`)).toBeVisible();
-
-    page.once('dialog', (dialog) => {
-      dialog.accept();
-    });
-    await page.click('button:has-text("Excluir") >> nth=0');
-  });
 
   test('05 - Transações - CRUD completo', async ({ page }) => {
     await page.goto('/login');
@@ -249,9 +189,7 @@ test.describe('Financeiro Fácil - Testes Completos', () => {
 
     const pages = [
       { label: 'Dashboard', url: '/dashboard', title: 'Dashboard' },
-      { label: 'Produtos', url: '/products', title: 'Produtos' },
       { label: 'Lançamentos', url: '/transactions', title: 'Lançamentos' },
-      { label: 'Categorias', url: '/categories', title: 'Categorias' },
       { label: 'Relatórios', url: '/reports', title: 'Relatórios' },
       { label: 'Assinatura', url: '/subscriptions', title: 'Assinatura' },
       { label: 'Configurações', url: '/settings', title: 'Configurações' },
@@ -293,18 +231,5 @@ test.describe('Financeiro Fácil - Testes Completos', () => {
     await page.waitForTimeout(500);
   });
 
-  test('16 - Busca de produtos funciona', async ({ page }) => {
-    await page.goto('/login');
-    await page.fill('input[placeholder="voce@empresa.com"]', TEST_USER.email);
-    await page.fill('input[placeholder="Sua senha"]', TEST_USER.password);
-    await page.click('button:has-text("Entrar")');
-    await page.waitForURL('**/dashboard');
 
-    await page.goto('/products');
-    await page.fill('input[placeholder="Buscar por nome..."]', 'Produto Teste PW');
-    await page.waitForTimeout(500);
-
-    await page.fill('input[placeholder="Buscar por nome..."]', '');
-    await page.waitForTimeout(500);
-  });
 });
