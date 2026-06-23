@@ -107,7 +107,41 @@ export default function ReportsPage() {
         </div>
       </div>
 
-      <section className="grid gap-4 sm:grid-cols-3">
+      {/* Mobile stat cards */}
+      <section className="grid grid-cols-2 gap-3 sm:hidden">
+        {loading ? (
+          <>
+            <div className="rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
+              <div className="h-3 w-20 animate-pulse rounded bg-slate-200 dark:bg-slate-700" />
+              <div className="mt-2 h-6 w-24 animate-pulse rounded bg-slate-200 dark:bg-slate-700" />
+            </div>
+            <div className="rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
+              <div className="h-3 w-20 animate-pulse rounded bg-slate-200 dark:bg-slate-700" />
+              <div className="mt-2 h-6 w-24 animate-pulse rounded bg-slate-200 dark:bg-slate-700" />
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="rounded-2xl border border-emerald-200 bg-gradient-to-br from-emerald-50 to-white p-4 dark:border-emerald-800 dark:from-emerald-950/30 dark:to-slate-900">
+              <p className="text-[10px] font-semibold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">Entradas</p>
+              <p className="mt-1 text-lg font-bold text-emerald-700 dark:text-emerald-300">+ {formatCurrency(report?.totals?.entries)}</p>
+            </div>
+            <div className="rounded-2xl border border-rose-200 bg-gradient-to-br from-rose-50 to-white p-4 dark:border-rose-800 dark:from-rose-950/30 dark:to-slate-900">
+              <p className="text-[10px] font-semibold uppercase tracking-wider text-rose-600 dark:text-rose-400">Saídas</p>
+              <p className="mt-1 text-lg font-bold text-rose-700 dark:text-rose-300">- {formatCurrency(report?.totals?.exits)}</p>
+            </div>
+            <div className="col-span-2 rounded-2xl border border-blue-200 bg-gradient-to-br from-blue-50 to-white p-4 dark:border-blue-800 dark:from-blue-950/30 dark:to-slate-900">
+              <p className="text-[10px] font-semibold uppercase tracking-wider text-blue-600 dark:text-blue-400">Lucro</p>
+              <p className={`mt-1 text-lg font-bold ${(report?.totals?.profit || 0) >= 0 ? 'text-blue-700 dark:text-blue-300' : 'text-rose-700 dark:text-rose-300'}`}>
+                {formatCurrency(report?.totals?.profit)}
+              </p>
+            </div>
+          </>
+        )}
+      </section>
+
+      {/* Desktop stat cards */}
+      <section className="hidden gap-4 sm:grid sm:grid-cols-3">
         <StatCard title="Total de entradas" value={loading ? 0 : report?.totals?.entries} tone="text-emerald-600" />
         <StatCard title="Total de saídas" value={loading ? 0 : report?.totals?.exits} tone="text-rose-600" />
         <StatCard title="Lucro" value={loading ? 0 : report?.totals?.profit} tone="text-blue-600" />
@@ -124,16 +158,16 @@ export default function ReportsPage() {
               Carregando gráfico...
             </div>
           ) : (
-            <div className="h-80">
+            <div className="h-64 md:h-80">
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={report.monthly} margin={{ top: 16, right: 16, left: 0, bottom: 0 }}>
+                <BarChart data={report.monthly} margin={{ top: 8, right: 8, left: -16, bottom: 0 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-                  <XAxis dataKey="mes" stroke="#64748b" />
-                  <YAxis stroke="#64748b" tickFormatter={(value) => `R$ ${value}`} />
+                  <XAxis dataKey="mes" stroke="#64748b" tick={{ fontSize: 10 }} />
+                  <YAxis stroke="#64748b" tick={{ fontSize: 10 }} tickFormatter={(value) => `R$ ${value}`} />
                   <Tooltip formatter={(value) => formatCurrency(value)} />
-                  <Legend />
-                  <Bar dataKey="entradas" fill="#10b981" radius={[8, 8, 0, 0]} />
-                  <Bar dataKey="saidas" fill="#f43f5e" radius={[8, 8, 0, 0]} />
+                  <Legend wrapperStyle={{ fontSize: '11px' }} />
+                  <Bar dataKey="entradas" fill="#10b981" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="saidas" fill="#f43f5e" radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>

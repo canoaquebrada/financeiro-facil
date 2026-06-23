@@ -214,7 +214,8 @@ export default function AuditLogPage() {
           </div>
         ) : (
           <>
-            <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+            {/* Desktop Table */}
+            <div className="hidden overflow-hidden rounded-xl border border-gray-200 dark:border-gray-700 md:block">
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
@@ -264,6 +265,40 @@ export default function AuditLogPage() {
                   </tbody>
                 </table>
               </div>
+            </div>
+
+            {/* Mobile Cards */}
+            <div className="space-y-3 md:hidden">
+              {logs.map((log) => (
+                <div key={log.id} className="rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800">
+                  <div className="mb-2 flex items-start justify-between">
+                    <div className="flex items-center gap-2">
+                      <span className={`inline-flex px-2 py-1 text-[10px] font-bold rounded-full ${getActionColor(log.action)}`}>
+                        {getActionLabel(log.action)}
+                      </span>
+                      <span className="text-xs font-medium text-gray-600 dark:text-gray-300">
+                        {getEntityLabel(log.entity)}
+                      </span>
+                    </div>
+                    <span className="text-[10px] text-gray-400 dark:text-gray-500 whitespace-nowrap">
+                      {formatDate(log.createdAt)}
+                    </span>
+                  </div>
+                  <div className="mb-1">
+                    <p className="text-sm font-semibold text-gray-900 dark:text-white">
+                      {log.user?.name || 'N/A'}
+                    </p>
+                    <p className="text-[10px] text-gray-500 dark:text-gray-400">
+                      {log.user?.email}
+                    </p>
+                  </div>
+                  {log.details && (
+                    <p className="text-xs text-gray-500 dark:text-gray-400 line-clamp-2">
+                      {log.details}
+                    </p>
+                  )}
+                </div>
+              ))}
             </div>
 
             {pagination.totalPages > 1 && (
