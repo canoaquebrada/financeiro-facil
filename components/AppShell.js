@@ -69,6 +69,7 @@ function SubscriptionBadge() {
 const nav = [
   { href: '/dashboard', label: 'Dashboard', icon: '📊' },
   { href: '/transactions', label: 'Lançamentos', icon: '💸' },
+  { href: '/products', label: 'Produtos', icon: '📦' },
   { href: '/reports', label: 'Relatórios', icon: '📈' },
   { href: '/notifications', label: 'Notificações', icon: '🔔' },
   { href: '/subscriptions', label: 'Assinatura', icon: '⭐' },
@@ -80,6 +81,7 @@ const nav = [
 const pageTitles = {
   '/dashboard': 'Dashboard',
   '/transactions': 'Lançamentos',
+  '/products': 'Produtos',
   '/reports': 'Relatórios',
   '/notifications': 'Notificações',
   '/subscriptions': 'Assinatura',
