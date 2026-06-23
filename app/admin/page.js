@@ -289,8 +289,8 @@ export default function AdminPage() {
           </div>
         </div>
 
-        {/* Table */}
-        <div className="overflow-x-auto">
+        {/* Desktop Table */}
+        <div className="hidden overflow-x-auto md:block">
           <table className="w-full text-left text-sm">
             <thead className="bg-slate-50 text-slate-500 dark:bg-slate-950 dark:text-slate-400">
               <tr>
@@ -346,7 +346,7 @@ export default function AdminPage() {
                         <span className={`text-[10px] ${
                           u.daysRemaining > 0 && u.daysRemaining <= 3
                             ? 'text-amber-500 font-semibold'
-                            : u.daysRemaining === 0
+                            : u.daysRemaining <= 0 || u.daysRemaining === 0
                             ? 'text-rose-500 font-semibold'
                             : 'text-slate-400 dark:text-slate-500'
                         }`}>
@@ -354,7 +354,7 @@ export default function AdminPage() {
                         </span>
                       )}
                       {u.subscriptionPlan === 'lifetime' && (
-                        <span className="text-[10px] text-emerald-500 font-semibold">Vitalício</span>
+                        <span className="text-[10px] text-emerald-500 font-semibold">∞ Vitalício</span>
                       )}
                     </div>
                   </td>
@@ -394,6 +394,119 @@ export default function AdminPage() {
             </tbody>
           </table>
         </div>
+
+        {/* Mobile Cards */}
+        <div className="divide-y divide-slate-100 dark:divide-slate-800 md:hidden">
+          {filteredSortedUsers.map((u) => (
+            <div key={u.id} className="p-4">
+              <div className="mb-2 flex items-start justify-between">
+                <div className="flex-1 min-w-0 pr-2">
+                  <p className="text-sm font-bold text-slate-900 dark:text-white truncate">{u.name}</p>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 truncate">{u.email}</p>
+                </div>
+                <div className="flex items-center gap-1.5 shrink-0">
+                  <span
+                    className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${
+                      u.role === 'admin'
+                        ? 'bg-violet-50 text-violet-700 dark:bg-violet-500/10 dark:text-violet-300'
+                        : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300'
+                    }`}
+                  >
+                    {u.role === 'admin' ? 'Admin' : 'Usuário'}
+                  </span>
+                  <span className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold ${
+                    u.status === 'active'
+                      ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-300'
+                      : 'bg-rose-50 text-rose-700 dark:bg-rose-500/10 dark:text-rose-300'
+                  }`}>
+                    <span className={`h-1.5 w-1.5 rounded-full ${
+                      u.status === 'active' ? 'bg-emerald-500' : 'bg-rose-500'
+                    }`} />
+                    {u.status === 'active' ? 'Ativo' : 'Pausado'}
+                  </span>
+                </div>
+              </div>
+
+              {/* Subscription Card */}
+              <div className={`mb-3 rounded-2xl border p-3 ${
+                u.subscriptionPlan === 'lifetime'
+                  ? 'border-emerald-200 bg-emerald-50/50 dark:border-emerald-800 dark:bg-emerald-900/20'
+                  : u.daysRemaining !== undefined && u.daysRemaining <= 0
+                  ? 'border-rose-200 bg-rose-50/50 dark:border-rose-800 dark:bg-rose-900/20'
+                  : u.daysRemaining !== undefined && u.daysRemaining <= 3
+                  ? 'border-amber-200 bg-amber-50/50 dark:border-amber-800 dark:bg-amber-900/20'
+                  : 'border-slate-200 bg-slate-50/50 dark:border-slate-700 dark:bg-slate-800/30'
+              }`}>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm">
+                      {u.subscriptionPlan === 'lifetime' ? '💎' : u.subscriptionPlan === 'trial' ? '🆓' : '⭐'}
+                    </span>
+                    <div>
+                      <p className="text-xs font-bold text-slate-900 dark:text-white">
+                        {PLAN_LABELS[u.subscriptionPlan] || u.subscriptionPlan || 'Nenhum'}
+                      </p>
+                      {u.subscriptionEnd && (
+                        <p className="text-[10px] text-slate-500 dark:text-slate-400">
+                          Expira: {new Date(u.subscriptionEnd).toLocaleDateString('pt-BR')}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    {u.subscriptionPlan === 'lifetime' && (
+                      <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400">∞ Vitalício</span>
+                    )}
+                    {u.subscriptionEnd && u.subscriptionPlan !== 'lifetime' && (
+                      <span className={`text-[10px] font-bold ${
+                        u.daysRemaining > 0 && u.daysRemaining <= 3
+                          ? 'text-amber-600 dark:text-amber-400'
+                          : u.daysRemaining <= 0
+                          ? 'text-rose-600 dark:text-rose-400'
+                          : 'text-slate-500 dark:text-slate-400'
+                      }`}>
+                        {u.timeRemaining || `${u.daysRemaining}d`} restantes
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between">
+                <p className="text-[10px] text-slate-400 dark:text-slate-500">
+                  Cadastro: {formatDate(u.createdAt)}
+                </p>
+                <div className="flex gap-1">
+                  <button
+                    onClick={() => toggleUserStatus(u)}
+                    disabled={u.id === user?.id}
+                    className={`rounded-xl px-2.5 py-1.5 text-[10px] font-bold transition disabled:opacity-30 ${
+                      u.status === 'active'
+                        ? 'text-amber-600 hover:bg-amber-50 dark:text-amber-300 dark:hover:bg-amber-500/10'
+                        : 'text-emerald-600 hover:bg-emerald-50 dark:text-emerald-300 dark:hover:bg-emerald-500/10'
+                    }`}
+                  >
+                    {u.status === 'active' ? 'Pausar' : 'Ativar'}
+                  </button>
+                  <button
+                    onClick={() => openEdit(u)}
+                    className="rounded-xl px-2.5 py-1.5 text-[10px] font-bold text-blue-600 hover:bg-blue-50 dark:text-blue-300 dark:hover:bg-blue-500/10"
+                  >
+                    Editar
+                  </button>
+                  <button
+                    onClick={() => removeUser(u.id)}
+                    disabled={u.id === user?.id}
+                    className="rounded-xl px-2.5 py-1.5 text-[10px] font-bold text-rose-600 hover:bg-rose-50 disabled:opacity-30 dark:text-rose-300 dark:hover:bg-rose-500/10"
+                  >
+                    Excluir
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
         {!filteredSortedUsers.length && (
           <div className="border-t border-dashed border-slate-200 p-8 text-center text-sm text-slate-500 dark:border-slate-800">
             {search || filterRole || filterStatus || filterPlan

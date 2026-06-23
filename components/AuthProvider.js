@@ -62,7 +62,7 @@ export default function AuthProvider({ children }) {
   useEffect(() => {
     if (loading) return;
 
-    const authRoutes = ['/login', '/register', '/subscriptions'];
+    const authRoutes = ['/login', '/register'];
     if (!user && !authRoutes.includes(pathname)) {
       router.replace('/login');
     }

@@ -210,7 +210,8 @@ export default function TransactionsPage() {
       </div>
 
       <div className="mt-6 rounded-3xl border border-slate-200 bg-white shadow-sm shadow-slate-200/70 dark:border-slate-800 dark:bg-slate-900 dark:shadow-none">
-        <div className="overflow-x-auto">
+        {/* Desktop Table */}
+        <div className="hidden overflow-x-auto md:block">
           <table className="w-full text-left text-sm">
             <thead className="bg-slate-50 text-slate-500 dark:bg-slate-950 dark:text-slate-400">
               <tr>
@@ -283,6 +284,85 @@ export default function TransactionsPage() {
             </tbody>
           </table>
         </div>
+
+        {/* Mobile Cards */}
+        <div className="divide-y divide-slate-100 dark:divide-slate-800 md:hidden">
+          {transactions.map((item) => (
+            <div key={item.id} className="p-4">
+              {/* Header: tipo + valor */}
+              <div className="mb-2 flex items-start justify-between">
+                <div className="flex items-center gap-2">
+                  <span className={`flex h-8 w-8 items-center justify-center rounded-xl text-sm font-bold ${
+                    item.type === 'entrada'
+                      ? 'bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-300'
+                      : 'bg-rose-50 text-rose-600 dark:bg-rose-500/10 dark:text-rose-300'
+                  }`}>
+                    {item.type === 'entrada' ? '↑' : '↓'}
+                  </span>
+                  <div>
+                    <p className="text-sm font-bold text-slate-900 dark:text-white">{item.description}</p>
+                    <p className="text-xs text-slate-500 dark:text-slate-400">{item.category}</p>
+                  </div>
+                </div>
+                <div className="text-right shrink-0">
+                  <p className={`text-sm font-bold ${
+                    item.type === 'entrada' ? 'text-emerald-600' : 'text-rose-600'
+                  }`}>
+                    {item.type === 'entrada' ? '+' : '-'} {formatCurrency(item.amount)}
+                  </p>
+                </div>
+              </div>
+
+              {/* Info row */}
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <span className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${
+                    item.type === 'entrada'
+                      ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-300'
+                      : 'bg-rose-50 text-rose-700 dark:bg-rose-500/10 dark:text-rose-300'
+                  }`}>
+                    {item.type === 'entrada' ? 'Entrada' : 'Saída'}
+                  </span>
+                  <span
+                    className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${
+                      item.displayStatus === 'pago'
+                        ? 'bg-blue-50 text-blue-700 dark:bg-blue-500/10 dark:text-blue-300'
+                        : item.displayStatus === 'vencido'
+                          ? 'bg-rose-50 text-rose-700 dark:bg-rose-500/10 dark:text-rose-300'
+                          : 'bg-amber-50 text-amber-700 dark:bg-amber-500/10 dark:text-amber-300'
+                    }`}
+                  >
+                    {item.displayStatus}
+                  </span>
+                  <span className="text-[10px] text-slate-400 dark:text-slate-500">
+                    {formatDate(item.date)}
+                  </span>
+                </div>
+                <div className="flex gap-1">
+                  <button
+                    onClick={() => openEdit(item)}
+                    className="rounded-lg px-2 py-1 text-[10px] font-bold text-blue-600 hover:bg-blue-50 dark:text-blue-300 dark:hover:bg-blue-500/10"
+                  >
+                    Editar
+                  </button>
+                  <button
+                    onClick={() => removeTransaction(item.id)}
+                    className="rounded-lg px-2 py-1 text-[10px] font-bold text-rose-600 hover:bg-rose-50 dark:text-rose-300 dark:hover:bg-rose-500/10"
+                  >
+                    Excluir
+                  </button>
+                </div>
+              </div>
+
+              {item.client && (
+                <p className="mt-1.5 text-[10px] text-slate-400 dark:text-slate-500">
+                  Cliente: {item.client}
+                </p>
+              )}
+            </div>
+          ))}
+        </div>
+
         {!transactions.length && (
           <div className="rounded-b-3xl border-t border-dashed border-slate-200 p-8 text-center text-sm text-slate-500 dark:border-slate-800">
             Nenhum lançamento encontrado.

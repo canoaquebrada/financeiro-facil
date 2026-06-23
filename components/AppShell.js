@@ -229,12 +229,15 @@ export default function AppShell({ children }) {
                   </Link>
                 ))}
               </nav>
-              <button
-                onClick={logout}
-                className="mt-6 rounded-2xl border border-slate-200 px-4 py-3 text-sm font-semibold dark:border-slate-700"
-              >
-                Sair do sistema
-              </button>
+              <div className="mt-auto">
+                <SubscriptionBadge />
+                <button
+                  onClick={logout}
+                  className="mt-4 w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm font-semibold text-slate-600 transition hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
+                >
+                  Sair do sistema
+                </button>
+              </div>
             </div>
           </div>
         )}
