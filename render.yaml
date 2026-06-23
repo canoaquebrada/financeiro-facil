@@ -1,0 +1,31 @@
+# Render Blueprint — Financeiro Fácil
+# Docs: https://render.com/docs/blueprint-spec
+
+services:
+  # Web service: Next.js app
+  - type: web
+    name: financeiro-facil
+    runtime: node
+    repo: https://github.com/canoaquebrada/financeiro-facil
+    plan: starter  # Persistent disk requires a paid plan (Starter or higher)
+    region: ohio  # Leste dos EUA — melhor latência para o Brasil
+
+    buildCommand: npm install && npx prisma generate && npm run build
+    startCommand: ./start.sh
+
+    healthCheckPath: /api/health
+
+    # Persistent disk for SQLite database
+    disk:
+      name: sqlite-data
+      mountPath: /opt/render/project/src/data
+      sizeGB: 1
+
+    # Environment variables
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        value: file:/opt/render/project/src/data/prod.db
+      - key: AUTH_SECRET
+        sync: false  # User must set this manually

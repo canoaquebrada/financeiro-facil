@@ -7,3 +7,5 @@ node_modules
 *.log
 prisma/*.db
 prisma/*.db-journal
+data/
+!data/.gitkeep
